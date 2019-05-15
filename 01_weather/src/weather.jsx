@@ -39,15 +39,17 @@ class Weather extends React.Component {
     const { name, main, weather } = details;
     const date = new Date(Date.now()).toDateString();
 
+    if (error) {
+      return <h1>There was an error loading the weather.</h1>
+    }
     if (!isLoaded) {
       return (
         <div>
-          <p>Please allow access to your location.</p>
+          <p>Loading...</p>
         </div>
       )
     } else {
-
-      const { icon } = weather[0]
+      const { icon } = weather[0];
       return (
         <div>
           <h1>Today's Weather</h1>
