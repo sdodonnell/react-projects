@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css';
-import Day from './day';
+import Weather from './weather';
 
 function App() {
   return (
     <div className="App">
-      <Day />
+      <Weather />
     </div>
   );
 }
