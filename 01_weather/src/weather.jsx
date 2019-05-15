@@ -9,19 +9,21 @@ class Weather extends React.Component {
       isLoaded: false,
       details: {}
     }
+    this.getWeather = this.getWeather.bind(this)
   }
 
   componentDidMount() {
-    navigator.geolocation.getCurrentPosition(position => getWeather(position));
+    navigator.geolocation.getCurrentPosition(position => this.getWeather(position));
   }
 
   getWeather(position) {
+    console.log('About to fetch...');
     fetch(`https://fcc-weather-api.glitch.me/api/current?lat=${position.coords.latitude}&lon=${position.coords.longitude}`)
       .then(res => res.json())
       .then(res => {
         this.setState({
           isLoaded: true,
-          details: res.main
+          details: res
         })
       },
       error => {
@@ -33,17 +35,32 @@ class Weather extends React.Component {
   }
   
   render() {
-    return (
-      <div>
-        <h1>Today's Weather</h1>
-        <h3>May 15, 2019</h3>
-        <img src="https://cdn.glitch.com/6e8889e5-7a72-48f0-a061-863548450de5%2F10n.png?1499366021399"/>
-        <p>Temp: 79ºF</p>
-        <p>High: 80ºF</p>
-        <p>Low: 75ºF</p>
-        <p>Humidity: 100%</p>
-      </div>
-    )
+    const { isLoaded, error, details } = this.state;
+    const { name, main, weather } = details;
+    const date = new Date(Date.now()).toDateString();
+
+    if (!isLoaded) {
+      return (
+        <div>
+          <p>Please allow access to your location.</p>
+        </div>
+      )
+    } else {
+
+      const { icon } = weather[0]
+      return (
+        <div>
+          <h1>Today's Weather</h1>
+          <h2>Your Location: { name }</h2>
+          <h3>{ date }</h3>
+          <img src={ icon }/>
+          <p>Temp: { main.temp }</p>
+          <p>High: { main.temp_max }</p>
+          <p>Low: { main.temp_min }</p>
+          <p>Humidity: { main.humidity }</p>
+        </div>
+      )
+    }
   }
 }
 
